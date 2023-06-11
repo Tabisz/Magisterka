@@ -3,39 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LinearInterpolationTransition : MonoBehaviour
+public class BaseInterpolationScript : MonoBehaviour
 {
-    [SerializeField] private ArmatureRotation armatureRotation;
+    [SerializeField] protected ArmatureRotation armatureRotation;
+    [SerializeField] protected int transitionLenght = 10;
+    protected int startingFrame = 0;
+    
+    protected int currentFrame;
+    protected int CurrentFrame
+    {
+        get => currentFrame;
+        private set => currentFrame = value;
+    }
 
-    [SerializeField] private int transitionLenght = 10;
+    protected ArmatureRotation.RotationCalculation rotationMethod;
+    
+    protected Dictionary<string, Vector3> destinationRotations;
+    protected Dictionary<string, Vector3>  startingRotations;
 
-    private int startingFrame = 0;
-
-
-    private Dictionary<string, Vector3> destinationRotations;
-    private Dictionary<string, Vector3>  startingRotations;
-    void Start()
+    protected virtual void Start()
     {
         armatureRotation.CreateBoneRotators();
         startingRotations = armatureRotation.GatherAllRotations();
     }
-
+    
     private void Update()
     {
-        var currentFrame = Time.frameCount - startingFrame;
+        currentFrame = Time.frameCount - startingFrame;
         if(currentFrame>=0 && currentFrame < transitionLenght)
-            armatureRotation.SetupRotations( armatureRotation.CalculateCurrentRotationsForBones(LinearInterpolation,(float)currentFrame/transitionLenght , startingRotations));
-    }
+            armatureRotation.SetupRotations( armatureRotation.CalculateCurrentRotationsForBones(rotationMethod,(float)CurrentFrame/transitionLenght , startingRotations));
 
-    private Vector3 LinearInterpolation(float currentTransitionT, Vector3 startingRot,
-        Vector3 destinationRot)
-    {
-        return Vector3.LerpUnclamped(startingRot, destinationRot,currentTransitionT);
     }
-
 
     [ContextMenu("Setup Destination")]
-    public void SetupDestinationRotations()
+    private void SetupDestinationRotations()
     {
         armatureRotation.CreateBoneRotators();
         if (destinationRotations != null)
@@ -52,7 +53,7 @@ public class LinearInterpolationTransition : MonoBehaviour
     
     
     [ContextMenu("Print Destination")]
-    public void PrintDestinationRotations()
+    private void PrintDestinationRotations()
     {
         if (destinationRotations == null) return;
         foreach (var destinationRotation in destinationRotations)
