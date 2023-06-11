@@ -8,20 +8,41 @@ public class ArmatureRotation : MonoBehaviour
     
     public Dictionary<string,BoneRotator> BoneRotators;
 
-    public delegate Vector3 RotationCalculation(float currentTime, float transitionTime, Vector3 startingRot,
+    public ArmatureRotation destinationRotator;
+
+    public delegate Vector3 RotationCalculation(float currentTransitionT, Vector3 startingRot,
         Vector3 destinationRot);
 
-    public Dictionary<string,Vector3> CalculateCurrentRotationsForBones(RotationCalculation calculation, float transitionTime, Dictionary<string,Vector3> startingRotations,  Dictionary<string,Vector3> destinationRotations )
+    public Dictionary<string,Vector3> CalculateCurrentRotationsForBones(RotationCalculation calculation, float currentTransitionStage, Dictionary<string,Vector3> startingRotations,  Dictionary<string,Vector3> destinationRotations )
     {
         Dictionary<string, Vector3> dic = new Dictionary<string, Vector3>();
 
         Vector3 currStartingRot, currDestinationRot;
-        
+
         foreach (var boneRotator in BoneRotators)
         {
             if (startingRotations.TryGetValue(boneRotator.Key, out currStartingRot) &&
                 destinationRotations.TryGetValue(boneRotator.Key, out currDestinationRot))
-                dic.Add(boneRotator.Key,calculation.Invoke(Time.deltaTime, transitionTime, currStartingRot, currDestinationRot));
+                dic.Add(boneRotator.Key,calculation.Invoke( currentTransitionStage, currStartingRot, currDestinationRot));
+
+        }
+
+        return dic;
+    }
+    
+    public Dictionary<string,Vector3> CalculateCurrentRotationsForBones(RotationCalculation calculation, float currentTransitionStage, Dictionary<string,Vector3> startingRotations )
+    {
+        Dictionary<string, Vector3> dic = new Dictionary<string, Vector3>();
+
+        Vector3 currStartingRot;
+        BoneRotator destinationBone;
+        destinationRotator.CreateBoneRotators();
+
+        foreach (var boneRotator in BoneRotators)
+        {
+            if (startingRotations.TryGetValue(boneRotator.Key, out currStartingRot) &&
+                destinationRotator.BoneRotators.TryGetValue(boneRotator.Key, out destinationBone))
+                dic.Add(boneRotator.Key,calculation.Invoke( currentTransitionStage, currStartingRot, destinationBone.GetRotation));
 
         }
 
@@ -45,14 +66,12 @@ public class ArmatureRotation : MonoBehaviour
 
         foreach (var rotator in BoneRotators)
         {
-            dic.Add(rotator.Key, rotator.Value.transform.localRotation.eulerAngles);
+            dic.Add(rotator.Key, rotator.Value.GetRotation);
         }
 
         return dic;
     }
     
-
-    [ContextMenu("GenerateRotators")]
     public void CreateBoneRotators()
     {
         var childs = GetChildren(gameObject, true);

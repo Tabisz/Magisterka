@@ -10,4 +10,6 @@ public class BoneRotator : MonoBehaviour
     {
         transform.localRotation = Quaternion.Euler(newEulerAngles);
     }
+
+    public Vector3 GetRotation => transform.localRotation.eulerAngles;
 }
