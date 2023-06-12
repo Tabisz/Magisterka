@@ -2,50 +2,50 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ArmatureRotation : MonoBehaviour
 {
     
     public Dictionary<string,BoneRotator> BoneRotators;
 
-    public ArmatureRotation destinationRotator;
+    public List<ArmatureRotation> poses;
 
-    public delegate Vector3 RotationCalculation(float currentTransitionT, Vector3 startingRot,
-        Vector3 destinationRot);
+    public float destinationFrame = 0;
 
-    public Dictionary<string,Vector3> CalculateCurrentRotationsForBones(RotationCalculation calculation, float currentTransitionStage, Dictionary<string,Vector3> startingRotations,  Dictionary<string,Vector3> destinationRotations )
-    {
-        Dictionary<string, Vector3> dic = new Dictionary<string, Vector3>();
+    public delegate Vector3 RotationCalculation(float currentTransitionT,  List<InterpolationNode> nodes);
 
-        Vector3 currStartingRot, currDestinationRot;
-
-        foreach (var boneRotator in BoneRotators)
-        {
-            if (startingRotations.TryGetValue(boneRotator.Key, out currStartingRot) &&
-                destinationRotations.TryGetValue(boneRotator.Key, out currDestinationRot))
-                dic.Add(boneRotator.Key,calculation.Invoke( currentTransitionStage, currStartingRot, currDestinationRot));
-
-        }
-
-        return dic;
-    }
+    // public Dictionary<string,Vector3> CalculateCurrentRotationsForBones(RotationCalculation calculation, float currentTransitionStage, Dictionary<string,Vector3> startingRotations,  Dictionary<string,Vector3> destinationRotations )
+    // {
+    //     Dictionary<string, Vector3> dic = new Dictionary<string, Vector3>();
+    //
+    //     Vector3 currStartingRot, currDestinationRot;
+    //
+    //     foreach (var boneRotator in BoneRotators)
+    //     {
+    //         if (startingRotations.TryGetValue(boneRotator.Key, out currStartingRot) &&
+    //             destinationRotations.TryGetValue(boneRotator.Key, out currDestinationRot))
+    //             dic.Add(boneRotator.Key,calculation.Invoke( currentTransitionStage, currStartingRot, currDestinationRot));
+    //
+    //     }
+    //
+    //     return dic;
+    // }
     
-    public Dictionary<string,Vector3> CalculateCurrentRotationsForBones(RotationCalculation calculation, float currentTransitionStage, Dictionary<string,Vector3> startingRotations )
+    public Dictionary<string,Vector3> CalculateCurrentRotationsForBones(RotationCalculation calculation, float currentTransitionStage, Dictionary<string,List<InterpolationNode>> bonesInterpolationNodes )
     {
         Dictionary<string, Vector3> dic = new Dictionary<string, Vector3>();
+        List<InterpolationNode> currentInterpolationNodeList;
 
-        Vector3 currStartingRot;
-        BoneRotator destinationBone;
-        destinationRotator.CreateBoneRotators();
+        
+        
 
         foreach (var boneRotator in BoneRotators)
         {
-            if (startingRotations.TryGetValue(boneRotator.Key, out currStartingRot) &&
-                destinationRotator.BoneRotators.TryGetValue(boneRotator.Key, out destinationBone))
-                dic.Add(boneRotator.Key,calculation.Invoke( currentTransitionStage, currStartingRot, destinationBone.GetRotation));
+            if(bonesInterpolationNodes.TryGetValue(boneRotator.Key, out currentInterpolationNodeList))
+                dic.Add(boneRotator.Key,calculation.Invoke( currentTransitionStage,currentInterpolationNodeList));
 
         }
-
         return dic;
     }
     
@@ -60,13 +60,25 @@ public class ArmatureRotation : MonoBehaviour
         }
     }
 
-    public Dictionary<string, Vector3> GatherAllRotations()
+    public Dictionary<string, List<InterpolationNode>> GatherAllRotations()
     {
-        Dictionary<string, Vector3> dic = new Dictionary<string, Vector3>();
+        Dictionary<string, List<InterpolationNode>> dic = new Dictionary<string, List<InterpolationNode>>();
+
+        BoneRotator currRot;
+        
+        CreateBoneRotators();
+        foreach (var pose in poses)
+            pose.CreateBoneRotators();
 
         foreach (var rotator in BoneRotators)
         {
-            dic.Add(rotator.Key, rotator.Value.GetRotation);
+            List<InterpolationNode> nodesForBone = new List<InterpolationNode>();
+            foreach (var pose in poses)
+            {
+                if (pose.BoneRotators.TryGetValue(rotator.Key, out currRot))
+                        nodesForBone.Add(new InterpolationNode(currRot.GetRotation, pose.destinationFrame));
+            }
+            dic.Add(rotator.Key,nodesForBone);
         }
 
         return dic;
