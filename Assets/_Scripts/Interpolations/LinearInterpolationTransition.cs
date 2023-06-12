@@ -11,10 +11,10 @@ public class LinearInterpolationTransition : BaseInterpolationScript
         rotationMethod = LinearInterpolation;
     }
 
-    private Vector3 LinearInterpolation(float currentTransitionT, Vector3 startingRot,
-        Vector3 destinationRot)
+    private Vector3 LinearInterpolation(float currentTransitionT, List<InterpolationNode> nodes )
     {
-        return Vector3.LerpUnclamped(startingRot, destinationRot,currentTransitionT);
+        return Vector3.zero;
+        //return Vector3.LerpUnclamped(startingRot, destinationRot,currentTransitionT);
     }
     
 
