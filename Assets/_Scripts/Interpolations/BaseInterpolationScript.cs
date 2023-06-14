@@ -30,7 +30,7 @@ public class BaseInterpolationScript : MonoBehaviour
     {
         currentFrame = Time.frameCount - startingFrame;
         if(currentFrame>=0 && currentFrame < transitionLenght)
-            armatureRotation.SetupRotations( armatureRotation.CalculateCurrentRotationsForBones(rotationMethod,(float)CurrentFrame/transitionLenght , rotationNodes));
+            armatureRotation.SetupRotations( armatureRotation.CalculateCurrentRotationsForBones(rotationMethod,CurrentFrame , rotationNodes));
 
     }
 
