@@ -11,9 +11,9 @@ public class LinearInterpolationTransition : BaseInterpolationScript
         rotationMethod = LinearInterpolation;
     }
 
-    private Vector3 LinearInterpolation(float currentTransitionT, List<InterpolationNode> nodes )
+    private Quaternion LinearInterpolation(float currentTransitionT, List<InterpolationNode> nodes )
     {
-        return Vector3.zero;
+        return Quaternion.identity;
         //return Vector3.LerpUnclamped(startingRot, destinationRot,currentTransitionT);
     }
     

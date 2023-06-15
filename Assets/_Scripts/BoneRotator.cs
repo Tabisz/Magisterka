@@ -6,10 +6,10 @@ using UnityEngine;
 public class BoneRotator : MonoBehaviour
 {
 
-    public void RotateBone(Vector3 newEulerAngles)
+    public void RotateBone(Quaternion newRotation)
     {
-        transform.localRotation = Quaternion.Euler(newEulerAngles);
+        transform.localRotation = newRotation;
     }
 
-    public Vector3 GetRotation => transform.localRotation.eulerAngles;
+    public Quaternion GetRotation => transform.localRotation;
 }

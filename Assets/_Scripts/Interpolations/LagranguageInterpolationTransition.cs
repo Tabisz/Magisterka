@@ -10,9 +10,9 @@ public class LagranguageInterpolationTransition : BaseInterpolationScript
         rotationMethod = LagranguageInterpolation;
     }
 
-    private Vector3 LagranguageInterpolation(float currentTransitionT, List<InterpolationNode> nodes)
+    private Quaternion LagranguageInterpolation(float currentTransitionT, List<InterpolationNode> nodes)
     {
-        Vector3 returning = Vector3.zero;
+        Quaternion returning = Quaternion.identity;
         float axisResult = 0;
         float f1 = 1,f2 = 1;
         
@@ -74,6 +74,26 @@ public class LagranguageInterpolationTransition : BaseInterpolationScript
                 axisResult = nodes[0].rotation.z;
         }
         returning.z = axisResult;
+        axisResult = 0;
+        
+        for (var i = 0; i < nodes.Count; i++)
+        {
+            f1 = f2 = 1;
+            for (var j = 0; j < nodes.Count; j++)
+            {
+                if (i != j)
+                {
+                    f1 *= currentTransitionT - nodes[j].frame;
+                    f2 *= nodes[i].frame - nodes[j].frame;
+                }
+            }
+
+            if (f2 != 0)
+                axisResult += nodes[i].rotation.w * f1 / f2;
+            else
+                axisResult = nodes[0].rotation.w;
+        }
+        returning.w = axisResult;
         axisResult = 0;
 
         return returning;

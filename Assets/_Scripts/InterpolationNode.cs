@@ -4,12 +4,12 @@ using UnityEngine;
 
 public struct InterpolationNode
 {
-    public InterpolationNode(Vector3 rotation, float frame)
+    public InterpolationNode(Quaternion rotation, float frame)
     {
         this.rotation = rotation;
         this.frame = frame;
     }
 
-    public Vector3 rotation;
+    public Quaternion rotation;
     public float frame;
 }

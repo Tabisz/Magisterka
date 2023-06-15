@@ -13,7 +13,7 @@ public class ArmatureRotation : MonoBehaviour
 
     public float destinationFrame = 0;
 
-    public delegate Vector3 RotationCalculation(float currentTransitionT,  List<InterpolationNode> nodes);
+    public delegate Quaternion RotationCalculation(float currentTransitionT,  List<InterpolationNode> nodes);
 
     // public Dictionary<string,Vector3> CalculateCurrentRotationsForBones(RotationCalculation calculation, float currentTransitionStage, Dictionary<string,Vector3> startingRotations,  Dictionary<string,Vector3> destinationRotations )
     // {
@@ -32,9 +32,9 @@ public class ArmatureRotation : MonoBehaviour
     //     return dic;
     // }
     
-    public Dictionary<string,Vector3> CalculateCurrentRotationsForBones(RotationCalculation calculation, float currentTransitionStage, Dictionary<string,List<InterpolationNode>> bonesInterpolationNodes )
+    public Dictionary<string,Quaternion> CalculateCurrentRotationsForBones(RotationCalculation calculation, float currentTransitionStage, Dictionary<string,List<InterpolationNode>> bonesInterpolationNodes )
     {
-        Dictionary<string, Vector3> dic = new Dictionary<string, Vector3>();
+        Dictionary<string, Quaternion> dic = new Dictionary<string, Quaternion>();
         List<InterpolationNode> currentInterpolationNodeList;
 
         
@@ -49,7 +49,7 @@ public class ArmatureRotation : MonoBehaviour
         return dic;
     }
     
-    public void SetupRotations(Dictionary<string, Vector3> rotationsDictionary)
+    public void SetupRotations(Dictionary<string, Quaternion> rotationsDictionary)
     {
         BoneRotator currentRotator;
         foreach (var rotations in rotationsDictionary)
