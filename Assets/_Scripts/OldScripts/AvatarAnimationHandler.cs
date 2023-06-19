@@ -43,7 +43,7 @@ namespace MarekTabiszewski.Core.AnimationDataCollection
             animator.enabled = false;
             
             SetBonesRecursive(root);
-            OnCollectionEnd += dataCollector.ListenForCollectionEnd;
+           // OnCollectionEnd += dataCollector.ListenForCollectionEnd;
 
 
             Debug.Log("collected bones: " + bones.Count);

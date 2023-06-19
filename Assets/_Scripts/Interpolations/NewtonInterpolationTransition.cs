@@ -19,11 +19,13 @@ public class NewtonInterpolationTransition : BaseInterpolationScript
         float[] a = new float[nodes.Count];
 
         for (var i = 0; i < nodes.Count; i++)
-            a[i] = nodes[i].frame;
+            a[i] = nodes[i].rotation.x;
 
         for (var i = 1; i < nodes.Count; i++)
-            for (var j = 0; j < i; j++)
-                a[i] = (a[i] - a[j]) / (nodes[i].rotation.x - nodes[j].rotation.x);
+        for (var j = 0; j < i; j++)
+        {
+                a[i] = (a[i] - a[j]) / (nodes[i].frame- nodes[j].frame);
+        }
 
         for (int i = 0; i < nodes.Count; i++)
         {
@@ -36,72 +38,75 @@ public class NewtonInterpolationTransition : BaseInterpolationScript
         }
 
         returning.x = result;
-        /////////////////////////////////////////////////////
+        // /////////////////////////////////////////////////////
 
         result = nodes[0].rotation.y;
 
 
         for (var i = 0; i < nodes.Count; i++)
-            a[i] = nodes[i].frame;
+            a[i] = nodes[i].rotation.y;
 
         for (var i = 1; i < nodes.Count; i++)
-            for (var j = 0; j < i; j++)
-                a[i] = (a[i] - a[j]) / (nodes[i].rotation.y - nodes[j].rotation.y);
+        for (var j = 0; j < i; j++)
+        {
+            a[i] = (a[i] - a[j]) / (nodes[i].frame- nodes[j].frame);
+        }
 
         for (int i = 0; i < nodes.Count; i++)
         {
             float f = 1;
-            for (int j = 0; j < i; j++)
+            for (int j= 0; j<i; j++)
             {
                 f *= currentTransitionT - nodes[j].rotation.y;
-                result += a[i] * f;
+                result += a[i] * f; 
             }
         }
 
         returning.y = result;
-        /////////////////////////////////////////////
-
+        // /////////////////////////////////////////////
 
         result = nodes[0].rotation.z;
 
         for (var i = 0; i < nodes.Count; i++)
-            a[i] = nodes[i].frame;
+            a[i] = nodes[i].rotation.z;
 
         for (var i = 1; i < nodes.Count; i++)
-            for (var j = 0; j < i; j++)
-                a[i] = (a[i] - a[j]) / (nodes[i].rotation.z - nodes[j].rotation.z);
+        for (var j = 0; j < i; j++)
+        {
+            a[i] = (a[i] - a[j]) / (nodes[i].frame- nodes[j].frame);
+        }
 
         for (int i = 0; i < nodes.Count; i++)
         {
             float f = 1;
-            for (int j = 0; j < i; j++)
+            for (int j= 0; j<i; j++)
             {
                 f *= currentTransitionT - nodes[j].rotation.z;
-                result += a[i] * f;
+                result += a[i] * f; 
             }
         }
 
         returning.z = result;
-        ////////////////////////////////////
-
+        // ////////////////////////////////////
 
         result = nodes[0].rotation.w;
 
-
         for (var i = 0; i < nodes.Count; i++)
-            a[i] = nodes[i].frame;
+            a[i] = nodes[i].rotation.w;
 
         for (var i = 1; i < nodes.Count; i++)
-            for (var j = 0; j < i; j++)
-                a[i] = (a[i] - a[j]) / (nodes[i].rotation.w - nodes[j].rotation.w);
+        for (var j = 0; j < i; j++)
+        {
+            a[i] = (a[i] - a[j]) / (nodes[i].frame- nodes[j].frame);
+        }
 
         for (int i = 0; i < nodes.Count; i++)
         {
             float f = 1;
-            for (int j = 0; j < i; j++)
+            for (int j= 0; j<i; j++)
             {
                 f *= currentTransitionT - nodes[j].rotation.w;
-                result += a[i] * f;
+                result += a[i] * f; 
             }
         }
 

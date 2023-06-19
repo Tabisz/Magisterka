@@ -30,28 +30,11 @@ namespace MarekTabiszewski.Core.AnimationDataCollection
             Application.targetFrameRate = 60;
 
         }
-
-
-        private void Start()
-        {
-            fullAnimationData = new List<List<BoneFrameData>>();
-            fullAvatarAnimationHandler.Init(this);
-            partialAnimationData = new List<List<BoneFrameData>>();
-            partialAvatarAnimationHandler.Init(this);
-
-        }
-
-        [ContextMenu("NameDataCollector")]
-        private void NameDataCollector()
-        {
-            textBox.text = animationDataName;
-        }
         private void Update()
         {
             if (fullAvatarAnimationHandler.ImActive &&
                 partialAvatarAnimationHandler.ImActive)
             {
-                SyncRootBones();
                 fullAnimationData.Add(
                     fullAvatarAnimationHandler.GetFrameData());
                 partialAnimationData.Add(
@@ -79,14 +62,6 @@ namespace MarekTabiszewski.Core.AnimationDataCollection
             string [,] comparedRotations = CompareBonesBetweenAvatars(fullAnimationData,partialAnimationData,CompareRotations);
             plainString = StringTableAsPlainString(comparedRotations);
             SaveStringToFile(plainString,animationDataName+"_rot");
-        }
-        private void SyncRootBones()
-        {
-            if (partialAvatarAnimationHandler.hips && fullAvatarAnimationHandler.hips)
-            {
-                partialAvatarAnimationHandler.hips.position = fullAvatarAnimationHandler.hips.position;
-                partialAvatarAnimationHandler.hips.rotation = fullAvatarAnimationHandler.hips.rotation;
-            }
         }
 
         private string[,] CompareBonesBetweenAvatars(List<List<BoneFrameData>> animationDataA,List<List<BoneFrameData>> animationDataB, ComparingMethod comparingMethod)
@@ -163,12 +138,7 @@ namespace MarekTabiszewski.Core.AnimationDataCollection
             writer.Write(text);
             writer.Close();
         }
-
-        public void ListenForCollectionEnd(AvatarAnimationHandler handler)
-        {
-            handler.ImActive = false;
-            handler.gameObject.SetActive(false);
-        }
+        
     }
 }
 
