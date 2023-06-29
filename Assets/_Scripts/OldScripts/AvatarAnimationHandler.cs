@@ -12,7 +12,6 @@ namespace MarekTabiszewski.Core.AnimationDataCollection
             get => imActive;
             set => imActive = value;
         }
-
         private bool imActive;
 
         [SerializeField]
@@ -73,7 +72,7 @@ namespace MarekTabiszewski.Core.AnimationDataCollection
             {
                 Transform boneT = keyValuePair.Value;
                 bonesFrameData.Add(
-                    new BoneFrameData(boneT.position,boneT.rotation));
+                    new BoneFrameData(boneT.rotation));
             }
         
             return bonesFrameData;

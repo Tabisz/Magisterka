@@ -15,31 +15,12 @@ public class ArmatureRotation : MonoBehaviour
 
     public delegate Quaternion RotationCalculation(float currentTransitionT,  List<InterpolationNode> nodes);
 
-    // public Dictionary<string,Vector3> CalculateCurrentRotationsForBones(RotationCalculation calculation, float currentTransitionStage, Dictionary<string,Vector3> startingRotations,  Dictionary<string,Vector3> destinationRotations )
-    // {
-    //     Dictionary<string, Vector3> dic = new Dictionary<string, Vector3>();
-    //
-    //     Vector3 currStartingRot, currDestinationRot;
-    //
-    //     foreach (var boneRotator in BoneRotators)
-    //     {
-    //         if (startingRotations.TryGetValue(boneRotator.Key, out currStartingRot) &&
-    //             destinationRotations.TryGetValue(boneRotator.Key, out currDestinationRot))
-    //             dic.Add(boneRotator.Key,calculation.Invoke( currentTransitionStage, currStartingRot, currDestinationRot));
-    //
-    //     }
-    //
-    //     return dic;
-    // }
-    
     public Dictionary<string,Quaternion> CalculateCurrentRotationsForBones(RotationCalculation calculation, float currentTransitionStage, Dictionary<string,List<InterpolationNode>> bonesInterpolationNodes )
     {
         Dictionary<string, Quaternion> dic = new Dictionary<string, Quaternion>();
         List<InterpolationNode> currentInterpolationNodeList;
 
         
-        
-
         foreach (var boneRotator in BoneRotators)
         {
             if(bonesInterpolationNodes.TryGetValue(boneRotator.Key, out currentInterpolationNodeList))
