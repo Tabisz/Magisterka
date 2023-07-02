@@ -29,20 +29,20 @@ namespace MarekTabiszewski.Core.AnimationDataCollection
         
         public Dictionary<string,Transform> bones;
 
-        private DataCollector dataCollector;
+        private DataSaver _dataSaver;
 
         UnityAction<AvatarAnimationHandler> OnCollectionEnd;
 
-        public void Init( DataCollector dataCollector)
+        public void Init( DataSaver dataSaver)
         {
-            this.dataCollector = dataCollector;
+            this._dataSaver = dataSaver;
             bones = new Dictionary<string, Transform>();
             imActive = true;
 
             animator.enabled = false;
             
             SetBonesRecursive(root);
-           // OnCollectionEnd += dataCollector.ListenForCollectionEnd;
+           // OnCollectionEnd += dataSaver.ListenForCollectionEnd;
 
 
             Debug.Log("collected bones: " + bones.Count);

@@ -363,6 +363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   armatureRotation: {fileID: 919132148802369306}
+  dataCollector: {fileID: 0}
   transitionLenght: 1000
 --- !u!4 &280990215
 Transform:
@@ -388,6 +389,7 @@ GameObject:
   m_Component:
   - component: {fileID: 681672850}
   - component: {fileID: 681672849}
+  - component: {fileID: 681672851}
   m_Layer: 0
   m_Name: LagranguageInterpolationTransition (1)
   m_TagString: Untagged
@@ -408,6 +410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   armatureRotation: {fileID: 813679220}
+  dataCollector: {fileID: 681672851}
   transitionLenght: 300
 --- !u!4 &681672850
 Transform:
@@ -423,6 +426,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &681672851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681672848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f5e9cdb6d32f044d9e354ac4a722efe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationDataName: Tescik
 --- !u!1001 &714958236
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -799,7 +815,7 @@ GameObject:
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1509828467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -813,6 +829,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   armatureRotation: {fileID: 919132148802369306}
+  dataCollector: {fileID: 0}
   transitionLenght: 300
 --- !u!4 &1509828468
 Transform:

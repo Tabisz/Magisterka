@@ -8,11 +8,10 @@ public class BaseInterpolationScript : MonoBehaviour
 {
     [SerializeField] protected ArmatureRotation armatureRotation;
 
-    [SerializeField] protected DataCollector dataCollector;
+    public Dictionary<string,List<Quaternion>> rotationsForEachFrame;
 
-    private Dictionary<string,List<Quaternion>> rotationsForEachFrame;
+    public bool Completed;
 
-    private List<string> bones;
     [SerializeField] protected int transitionLenght = 10;
     protected int startingFrame = 0;
     
@@ -32,9 +31,11 @@ public class BaseInterpolationScript : MonoBehaviour
         armatureRotation.CreateBoneRotators();
         rotationNodes = armatureRotation.GatherAllRotations();
         rotationsForEachFrame = new Dictionary<string, List<Quaternion>>();
+
+        Completed = false;
     }
     
-    private void Update()
+    public void CustomUpdate()
     {
         currentFrame = Time.frameCount - startingFrame;
         if (currentFrame >= 0 && currentFrame < transitionLenght)
@@ -47,17 +48,6 @@ public class BaseInterpolationScript : MonoBehaviour
             
             foreach (var boneRot in currentRotationsForBones)
             {
-                // if (rotationsForEachFrame.TryGetValue(boneRot.Key, out currBoneFrameList))
-                // {
-                //     if(currentRotationsForBones.TryGetValue(boneRot.Key, out currBoneQuat));
-                //         currBoneFrameList.Add(currBoneQuat);
-                // }
-                // else
-                // {
-                //     var newList = new List<Quaternion>();
-                //     newList.Add(currBoneQuat);
-                //     rotationsForEachFrame.Add(boneRot.Key,newList);
-                // }
 
                 if (!rotationsForEachFrame.TryGetValue(boneRot.Key, out currBoneFrameList))
                 {
@@ -75,10 +65,8 @@ public class BaseInterpolationScript : MonoBehaviour
         }
         else
         {
-            dataCollector.SaveData(rotationsForEachFrame);
+            Completed = true;
             gameObject.SetActive(false);
-            Application.Quit();
-            Debug.Log("Write end");
         }
 
     }
