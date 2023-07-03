@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -39,7 +40,7 @@ namespace MarekTabiszewski.Core.AnimationDataCollection
                 var j = 1;
                 foreach (var q in keyValuePair.Value)
                 {
-                    dataTable[j, i] = q.x.ToString();
+                    dataTable[j, i] = q.w.ToString();
                     j++;
                 }
                 i++;
@@ -70,7 +71,7 @@ namespace MarekTabiszewski.Core.AnimationDataCollection
 
                 for (var k = 1; k < keyValuePair.Value.Count; k++)
                 {
-                    dataTable[k, i] = Quaternion.Angle(keyValuePair.Value[k-1], keyValuePair.Value[k]).ToString();
+                    dataTable[k, i] = Mathf.Abs(1 - Quaternion.Dot(keyValuePair.Value[k - 1], keyValuePair.Value[k])).ToString();
                 }
                 i++;
             }
@@ -106,7 +107,7 @@ namespace MarekTabiszewski.Core.AnimationDataCollection
 
                 for (var k = 1; k < keyValuePair.Value.Count; k++)
                 {
-                    dataTable[k, i] = Quaternion.Angle(rotationB[k], keyValuePair.Value[k]).ToString();
+                    dataTable[k, i] = Mathf.Abs((1 - Quaternion.Dot(rotationB[k], keyValuePair.Value[k]))).ToString();
                 }
                 i++;
             }
@@ -132,7 +133,10 @@ namespace MarekTabiszewski.Core.AnimationDataCollection
             if (animationDataA.TryGetValue(compareBoneName, out rotationA) && animationDataB.TryGetValue(compareBoneName, out rotationB))
             {
                 for (var k = 1; k < rotationB.Count; k++)
-                    dataTable[k, 1] = Quaternion.Angle(rotationB[k], rotationA[k]).ToString();
+                {
+                    dataTable[k, 1] = Mathf.Abs((1 - Quaternion.Dot(rotationA[k], rotationB[k]))).ToString();
+                    //Debug.LogFormat("Qb: {0} i Qa: {1} daja kat: {2}", rotationB[k], rotationA[k], dataTable[k, 1]);
+                }
             }
             Debug.Log("Compare done");
             return dataTable;
@@ -141,18 +145,20 @@ namespace MarekTabiszewski.Core.AnimationDataCollection
 
         private string StringTableAsPlainString(string[,] data)
         {
-            string s = "";
+            StringBuilder sb = new StringBuilder();
+           
             for (int i = 0; i < data.GetLength(1); i++)//rowLenght
             {
                 for (int j = 0; j < data.GetLength(0); j++)//colLenght
                 {
-                    s += data[j, i]+";";
+                    sb.Append(data[j, i]);
+                    sb.Append(";");
                 }
+                sb.Append("\n");
 
-                s += "\n";
             }
             Debug.Log("Parsing Done");
-            return s;
+            return sb.ToString();
         }
     
         private void SaveStringToFile(string text, string fileName)

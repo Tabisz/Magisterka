@@ -21,9 +21,17 @@ public class CollectionHandler : MonoBehaviour
 
         if (scriptA.Completed && scriptB.Completed)
         {
-            var preparedStringData  = dataSaver.CompareOneBoneBetweenAvatars(scriptA.rotationsForEachFrame, scriptB.rotationsForEachFrame, "RightUpLeg");
+            var preparedStringData = dataSaver.CompareOneBoneBetweenAvatars(scriptA.rotationsForEachFrame, scriptB.rotationsForEachFrame, "RightUpLeg");
             dataSaver.SaveData(preparedStringData, "compare_RULeg");
+
+            //var preparedStringData = dataSaver.PrintRotation(scriptA.rotationsForEachFrame);
+            //dataSaver.SaveData(preparedStringData, "rotationAw");
+
+            //preparedStringData = dataSaver.PrintRotation(scriptB.rotationsForEachFrame);
+            //dataSaver.SaveData(preparedStringData, "rotationBw");
+
             this.enabled = false;
+            Application.Quit();
         }
     }
 }
