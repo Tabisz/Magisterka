@@ -15,6 +15,24 @@ public class ArmatureRotation : MonoBehaviour
 
     public delegate Quaternion RotationCalculation(float currentTransitionT,  List<InterpolationNode> nodes);
 
+    public void Awake()
+    {
+        var animator = GetComponent<Animator>();
+        if (!animator) return;
+
+        //setup animation…
+        var animInfo = animator.GetCurrentAnimatorClipInfo(0);
+        if (animInfo.Length > 0)
+        {
+            var mainInfo = animInfo[0];
+            var myAnimCount = Mathf.FloorToInt(mainInfo.clip.frameRate * mainInfo.clip.length);
+
+            float normalizedTime = destinationFrame / (float)(myAnimCount) + 0.001f;
+            animator.Play("mixamo_com", 0, normalizedTime);
+            Debug.Log("hejo");
+        }
+    }
+
     public Dictionary<string,Quaternion> CalculateCurrentRotationsForBones(RotationCalculation calculation, float currentTransitionStage, Dictionary<string,List<InterpolationNode>> bonesInterpolationNodes )
     {
         Dictionary<string, Quaternion> dic = new Dictionary<string, Quaternion>();
